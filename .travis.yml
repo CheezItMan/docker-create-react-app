@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t cheezitman/docker-react -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true cheezitman/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-west-2"
+  app: "docker-react"
+  env: "DockerReact-env"
+  bucket_name: "elasticbeanstalk-us-west-2-190871853618"
+  bucket_path: "docker-react"
+  on:
+    branch: master
+  ACCESS_KEY_ID: $ACCESS_KEY_ID
+  SECRET_ACCESS_KEY: $SECRET_ACCESS_KEY
